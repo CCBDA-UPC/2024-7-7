@@ -11,32 +11,31 @@ import googleapiclient.discovery
 import matplotlib.pyplot as plt
 from collections import Counter
 
-# def download_images(url, download_folder="downloaded_images"):
-#     if not os.path.exists(download_folder):
-#         os.makedirs(download_folder)
-#
-#     # Launch Selenium WebDriver to get dynamic contents of the web page
-#     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-#     driver.get(url)
-#     time.sleep(10)
-#
-#     soup = BeautifulSoup(driver.page_source, 'html.parser')
-#     driver.quit()
-#
-#     for img in soup.find_all('img', src=lambda x: x and x.startswith("https://cloudfront-us-east-2.images.arcpublishing.com/reuters")):
-#         src = img['src']
-#         try:
-#             response = requests.get(src, stream=True)
-#             if response.status_code == 200:
-#                 filename = src.split('/')[-1].split("?")[0]
-#                 image_path = os.path.join(download_folder, filename)
-#                 with open(image_path, 'wb') as out_file:
-#                     out_file.write(response.content)
-#                 print(f"Downloaded {image_path}")
-#         except requests.RequestException as e:
-#             print(f"Failed to download {src}: {e}")
-# website_url = 'https://www.reuters.com/'
-# download_images(website_url)
+def download_images(url, download_folder="downloaded_images"):
+    if not os.path.exists(download_folder):
+        os.makedirs(download_folder)
+
+    # Launch Selenium WebDriver to get dynamic contents of the web page
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get(url)
+    time.sleep(10)
+
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    driver.quit()
+
+    for img in soup.find_all('img', src=lambda x: x and x.startswith("https://cloudfront-us-east-2.images.arcpublishing.com/reuters")):
+        src = img['src']
+        try:
+            response = requests.get(src, stream=True)
+            if response.status_code == 200:
+                filename = src.split('/')[-1].split("?")[0]
+                image_path = os.path.join(download_folder, filename)
+                with open(image_path, 'wb') as out_file:
+                    out_file.write(response.content)
+                print(f"Downloaded {image_path}")
+        except requests.RequestException as e:
+            print(f"Failed to download {src}: {e}")
+
 
 def main():
     histo = {}
@@ -112,6 +111,8 @@ def main():
         except KeyError:    # This means no landmark can be identified from the image
             pass
     return histo
+
+
 def plot_histogram(histo):
     descriptions = []
     for key, values in histo.items():
@@ -122,20 +123,22 @@ def plot_histogram(histo):
     description_counts = Counter(descriptions)
     sorted_descriptions = dict(sorted(description_counts.items(), key=lambda item: item[1], reverse=True))
 
-    plt.figure(figsize=(18, 10))  # Adjusted figure size
-    plt.bar(sorted_descriptions.keys(), sorted_descriptions.values())
-    plt.xlabel('Description', fontsize=14)  # Optionally adjust font size
-    plt.ylabel('Frequency', fontsize=14)  # Optionally adjust font size
-    plt.title('Frequency of Descriptions in Images', fontsize=16)  # Optionally adjust font size
-    plt.xticks(rotation=90, fontsize=12)  # Rotate labels and adjust font size for better legibility
-    plt.subplots_adjust(bottom=0.35)  # Increase the bottom margin
-    plt.savefig('description_frequency_histogram.png')
+    plt.figure(figsize=(20, 10))
+    plt.bar(range(len(sorted_descriptions)), sorted_descriptions.values(), tick_label=list(sorted_descriptions.keys()))
+    plt.xlabel('Description', fontsize=14)
+    plt.ylabel('Frequency', fontsize=14)
+    plt.title('Frequency of Descriptions in Images', fontsize=16)
+    plt.xticks(rotation=90, fontsize=10)
+    plt.xlim(-1, len(sorted_descriptions))
+    plt.subplots_adjust(left=0.05, right=0.95, bottom=0.4, top=0.95)
+    plt.savefig('description_frequency_histogram.png', bbox_inches='tight')
     plt.close()
 
-histo = main()
-plot_histogram(histo)
-# if __name__ == '__main__':
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('url', help='The website you'd like to scrape for images and send them to Google Vision.')
-#     args = parser.parse_args()
-#     main(args.url)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('url', help='The website you\'d like to scrape for images and send them to Google Vision.')
+    args = parser.parse_args()
+    download_images(args.url)
+    histo = main()
+    plot_histogram(histo)
