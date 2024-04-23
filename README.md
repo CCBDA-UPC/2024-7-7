@@ -27,4 +27,4 @@ Since we cannot scrape Twitter without a scraper that can render javascript, we 
 LOGO_DETECTION and LANDMARK_DETECTION. The following histogram can give a user an idea about what is on the news today
 based on the images in the articles. 
 
-
+![img](description_frequency_histogram.png)
