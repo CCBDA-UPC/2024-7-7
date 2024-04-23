@@ -24,7 +24,7 @@ We used PyCharms run configurations to add environment variables.
 ## Classify images
 Since we cannot scrape Twitter without a scraper that can render javascript, we settled with scraping images from 
 [Reuters](https://www.reuters.com/) and [Icelandic newspaper](https://www.visir.is). We analyzed them from three perspectives using the Google Cloud Vision, LABEL_DETECTION, 
-LOGO_DETECTION and LANDMARK_DETECTION. The following histogram can give a user an idea about what is on the news today
+LOGO_DETECTION and LANDMARK_DETECTION. For the ImageAnalyzer script to work as expected the URL parameter should be set/given as https://www.reuters.com/. The scraped images from the Icelandic newspaper by spider script can be used as input for the ImageAnalyzer script. In that case function *download_images* is not needed, same goes for the script's parameter. The following histogram can give a user an idea about what is on the news today
 based on the images in the articles. 
 
 ![img](description_frequency_histogram.png)
