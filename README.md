@@ -20,3 +20,10 @@ We used PyCharms run configurations to add environment variables.
 
 ![img](report/env.png)
 
+
+## Classify images
+Since we cannot scrape Twitter without a scraper that can render javascript, we settled with scaping images from 
+[Reuters](https://www.reuters.com/). We analyzed them from three perspectives using the Google Cloud Vision, LABEL_DETECTION, 
+LOGO_DETECTION and LANDMARK_DETECTION. The following histogram can give a user an idea about what is on the news today
+based on the images in the articles. 
+
