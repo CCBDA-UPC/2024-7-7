@@ -1,1 +1,3 @@
 *.json
+image_scraper/image_scraper/__pycache__/*
+image_scraper/image_scraper/spiders/__pycache__/*
